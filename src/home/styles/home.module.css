@@ -1,0 +1,20 @@
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.home {
+    display: flex;
+}
+
+.title {
+    
+}
+
+.text_format {
+    margin: 0;
+    padding: 0;
+}

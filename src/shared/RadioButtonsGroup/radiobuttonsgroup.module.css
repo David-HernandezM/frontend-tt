@@ -1,0 +1,7 @@
+.radio_buttons_group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all ease-in-out;
+    gap: 25px;
+}
