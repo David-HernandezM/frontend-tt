@@ -1,0 +1,16 @@
+.playground {
+    height: 90vh;
+    overflow-y: auto;
+}
+
+.playground__options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.playground__canvas {
+    /* background-color: blue; */
+    height: 93%;
+}

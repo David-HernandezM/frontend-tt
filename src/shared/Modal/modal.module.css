@@ -1,0 +1,127 @@
+/* Modal.module.css */
+:root {
+  --overlay-bg: rgba(0, 0, 0, 0.5);
+  --dialog-bg: #ffffff;
+  --radius: 16px;
+  --shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+  --border: 1px solid rgba(0, 0, 0, 0.06);
+  --text: #0f172a;       /* slate-900 */
+  --muted: #475569;      /* slate-600 */
+  --hover: #f1f5f9;      /* slate-100 */
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay-bg);
+  opacity: 0;
+  animation: fadeIn 180ms ease-out forwards;
+}
+
+.dialog {
+  position: relative;
+  z-index: 10;
+  width: min(90vw, 640px);
+  background: var(--dialog-bg);
+  color: var(--text);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: var(--border);
+  padding: 20px;
+  transform: translateY(8px) scale(0.98);
+  opacity: 0;
+  animation: popIn 200ms cubic-bezier(.2,.8,.2,1) forwards;
+  outline: none; /* manejamos foco manualmente */
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.closeButton {
+  border: 0;
+  background: transparent;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  line-height: 1;
+  transition: background-color 120ms ease-in-out;
+}
+
+.closeButton:hover {
+  background: var(--hover);
+}
+
+.closeButton:focus-visible {
+  outline: 2px solid #2563eb; /* azul accesible */
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+.body {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.button {
+  border: var(--border);
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 120ms ease-in-out, transform 60ms ease-in-out;
+}
+
+.button:hover {
+  background: var(--hover);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop,
+  .dialog {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

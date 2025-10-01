@@ -1,0 +1,25 @@
+.playground_code {
+    height: 50%;
+    /* background-color: pink; */
+    padding: 50px 100px;
+
+}
+
+.playground_code__title {
+    font-weight: 600;
+    font-size: 30px;
+    margin-bottom: 20px;
+    margin: 0 0 20px 0;
+}
+
+.playground_code__code_container {
+    display: flex;
+    align-items: start;
+    gap: 20px;
+}
+
+.playground_code__code_container button {
+    margin-top: 4px;
+}
+
+

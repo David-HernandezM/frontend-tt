@@ -1,5 +1,5 @@
 import { Home } from "../home";
-import { Root } from "./Root";
+import { Root } from "./root/Root";
 import { PlayGround } from "../playground";
 import { createBrowserRouter } from "react-router";
 

@@ -2,29 +2,35 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 5rem 0 2rem;
+    padding: 0 3rem;
 }
 
 .header {
     margin: 0;
     padding: 0;
-    width: 100%;
-    border: 2px solid grey;
-
+    border: 2px solid #AAAAAA;
 }
 
 .header__logo_container {
-    gap: 20px;
+    gap: 10px;
 }
 
 .header__tittle {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
+    padding: 0;
+    margin: 0;
 }
 
 .header__logo {
-    width: 50px;
-    height: 40px;
-    border: solid 2px grey;
+    width: 70px;
+    height: fit-content;
+    object-fit:cover;
 }
 
+.header__logo img {
+    width: 100%;
+    object-fit: cover;
+    padding: 0;
+    margin: 0;
+}

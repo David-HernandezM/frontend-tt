@@ -1,0 +1,30 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    border: solid 2px #AAAAAA;
+    border-radius: 7px;
+    width: 400px;
+    padding: 20px 20px;
+    gap: 20px;
+}
+
+
+.card__title_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 93%;
+}
+
+.card__title {
+    font-size: 30px;
+}
+
+.card__description {
+    font-size: 19px;
+}
+
+.text_format {
+    margin: 0;
+    padding: 0;
+}

@@ -1,0 +1,13 @@
+.playground {
+    /* background-color: pink; */
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.playground > button {
+    position: absolute;
+    top: 1rem;
+    left: 2rem;
+    z-index: 2;
+}

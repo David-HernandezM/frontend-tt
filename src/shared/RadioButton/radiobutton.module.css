@@ -1,19 +1,21 @@
 .radio_button {
     padding: 10px;
     transition: 0.1s all ease-in-out;
+    font-size: 19px;
 }
 
 .radio_button__selected {
-    border-bottom: 3px solid rgb(17, 114, 240);
+    border-bottom: 3px solid #074EE8;
+    color: #074EE8;
+}
 
+.radio_button__unselected {
+    color: #A4A4A4
 }
 
 .radio_button input[type="radio"] {
-    /* Add if not using autoprefixer */
   -webkit-appearance: none;
   appearance: none;
-  /* For iOS < 15 to remove gradient background */
   background-color: #fff;
-  /* Not removed via appearance */
   margin: 0;
 }

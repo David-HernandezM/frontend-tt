@@ -1,5 +1,7 @@
+import { Link } from 'react-router';
 import type { PropsWithChildren } from 'react';
 import styles from './Button.module.css';
+import cx from 'clsx';
 
 interface Props extends PropsWithChildren {
     linkData?: {
@@ -10,15 +12,19 @@ interface Props extends PropsWithChildren {
 
 export const Button = ({linkData, onClick = () => {}, children}: Props) => {
   return linkData ? (
-    <a 
-        className={styles.button_a}
-        href={linkData.url}
+    <Link
+        className={cx(
+          styles.button,
+          styles.button_a,
+        )}
+        to={linkData.url}
     >
         { children }
-    </a>
+    </Link>
   ) : (
     <button
         className={styles.button}
+        onClick={onClick}
     >
         { children }
     </button>
