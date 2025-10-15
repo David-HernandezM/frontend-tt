@@ -7,8 +7,20 @@
     padding: 10px 15px;
 }
 
+.button:hover {
+    background-color: #2262eb;
+}
+
 .button_a {
     text-decoration: none;
     color: white;
-    
+}
+
+.button_red {
+    background-color: #F66c52;
+    color: black;
+}
+
+.button_red:hover {
+    background-color: #fc6142;
 }

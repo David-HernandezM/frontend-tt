@@ -10,8 +10,8 @@ interface Props extends PropsWithChildren {
 }
 
 export function Modal({ open, onClose, title = "Modal", children }: Props) {
-  const dialogRef = useRef(null);
-  const lastFocusedRef = useRef(null);
+  const dialogRef = useRef<any>(null);
+  const lastFocusedRef = useRef<any>(null);
 
   // Bloquear scroll del body cuando está abierto
   useEffect(() => {
@@ -35,12 +35,11 @@ export function Modal({ open, onClose, title = "Modal", children }: Props) {
   useEffect(() => {
     if (!open) return;
 
-    const onKeyDown = (e) => {
+    const onKeyDown = (e: any) => {
       if (e.key === "Escape") onClose?.();
 
       if (e.key === "Tab") {
-        const focusables = dialogRef.current
-          ?.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])');
+        const focusables = dialogRef.current?.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])');
         if (!focusables || focusables.length === 0) return;
 
         const first = focusables[0];

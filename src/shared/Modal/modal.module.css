@@ -30,7 +30,8 @@
 .dialog {
   position: relative;
   z-index: 10;
-  width: min(90vw, 640px);
+  /* width: min(90vw, 640px); */
+  min-width: 500px;
   background: var(--dialog-bg);
   color: var(--text);
   border-radius: var(--radius);
@@ -52,7 +53,9 @@
 }
 
 .title {
-  font-size: 1.125rem; /* 18px */
+  /* 18px */
+  /* font-size: 1.125rem;  */
+  font-size: 25px;
   font-weight: 600;
   line-height: 1.2;
   margin: 0;

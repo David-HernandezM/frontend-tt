@@ -1,0 +1,29 @@
+.code_instructions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.code_instructions p {
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+    max-width: 800px;
+
+}
+
+.code_instructions img {
+    width: 500px;
+    margin: 0 auto;
+}
+
+.code_instructions__button_explanation {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.button_container {
+    display: flex;
+    justify-content: end;
+}

@@ -1,178 +1,234 @@
-    .node_table {
-        overflow-x: auto;
-        border: 2px solid #BDBDBD;
-        border-radius: 5px;
-        background: #fff;
-        overflow-y: hidden;
-    }
+/* .node_table {
+    overflow-x: auto;
+    border: 2px solid #BDBDBD;
+    border-radius: 5px;
+    background: #fff;
+    overflow-y: hidden;
+} */
 
-    .node_table__title_container {
-        position: relative;
-        padding: 10px 12px;
-        text-align: center;
+/* antes tenías overflow-y: hidden; */
+.node_table {
+  overflow-x: auto;
+  overflow-y: hidden; /*visible;  ← dejar visible para que el popup no se corte */
+  border: 2px solid #BDBDBD;
+  border-radius: 5px;
+  background: #fff;
+}
 
-    }
+.node_table__title_container {
+    position: relative;
+    padding: 10px 12px;
+    text-align: center;
 
-    .node_table__title {
-        font-size: 22px;
-        font-weight: 600;
-        text-align: center;
-        border: none;
-        background: transparent;
-        white-space: nowrap;
-        padding: 0;
-    }
+}
 
-    .node_table__close_button {
-        position: absolute;
-        right: 3px;
-        top: 3px;
-        width: 20px;
-        height: 20px;
-        border-radius: 59%;
-        cursor: pointer;
-    }
+.node_table__title {
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    background: transparent;
+    white-space: nowrap;
+    padding: 0;
+}
 
-    .node_table__columns_container {
-        display: flex;
-        /* justify-content: center;
-        align-items: center; */
-    }
-
-    .node_table__badges {
+.node_table__close_button {
     position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: inline-flex;
-    gap: 6px;
-    pointer-events: none; /* no bloquea edición ni drag */
-    z-index: 2;
-    }
+    right: 3px;
+    top: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 59%;
+    cursor: pointer;
+}
 
-    .badge_icon { width: 18px; height: 18px; }
+.node_table__columns_container {
+    display: flex;
+    /* justify-content: center;
+    align-items: center; */
+}
 
-    .node_table__badgesCorner {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    display: inline-flex;
-    pointer-events: none;  /* no bloquea edición ni drag */
-    z-index: 4;            /* debajo del menú (que tiene z-index:5) */
-    }
+.node_table__badges {
+position: absolute;
+left: 16px;
+top: 50%;
+transform: translateY(-50%);
+display: inline-flex;
+gap: 6px;
+pointer-events: none; /* no bloquea edición ni drag */
+z-index: 2;
+}
 
-    /* .node_table__badgesCorner img {
-        height: 12px;
-        width: 12px;
-    } */
+.badge_icon { width: 18px; height: 18px; }
 
-    .badge_icon__medium {
-        width: 14px;
-        height: 15px;
-    }
+.node_table__badgesCorner {
+position: absolute;
+top: 2px;
+right: 2px;
+display: inline-flex;
+pointer-events: none;  /* no bloquea edición ni drag */
+z-index: 4;            /* debajo del menú (que tiene z-index:5) */
+}
 
-    .badge_icon_sm {
-    width: 12px;
+/* .node_table__badgesCorner img {
     height: 12px;
-    }
+    width: 12px;
+} */
+
+.badge_icon__medium {
+    width: 14px;
+    height: 15px;
+}
+
+.badge_icon_sm {
+width: 12px;
+height: 12px;
+}
 
 
-    .node_table__column {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px 8px;
-        border-right: 3px solid #BDBDBD;
-        min-width: 100px;
-    }
+.node_table__column {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 8px;
+    border-right: 3px solid #BDBDBD;
+    min-width: 100px;
+}
 
-    .node_table__column_input {
-        border: 0;
-        background: transparent;
-        outline: none;
-        font-size: 18px;
-        text-align: center;
-        width: auto;
-    }
+.node_table__column_input {
+    border: 0;
+    background: transparent;
+    outline: none;
+    font-size: 18px;
+    text-align: center;
+    width: auto;
+}
 
-    .node_handler_transparent {
-        background-color: transparent !important;
-        transition: 0.1s ease-in-out all;
-    }
+.node_handler_transparent {
+    background-color: transparent !important;
+    transition: 0.1s ease-in-out all;
+}
 
-    .node_handler__blue {
-        background-color: rgba(10, 88, 255, 0.10) !important;
-        transition: 0.2s ease-in-out all;
-    }
+.node_handler__blue {
+    background-color: rgba(10, 88, 255, 0.10) !important;
+    transition: 0.2s ease-in-out all;
+}
 
-    .node_handler__red {
-        background-color: rgba(255, 59, 48, 0.12) !important;
-        transition: 0.2s ease-in-out all;
-    }
+.node_handler__red {
+    background-color: rgba(255, 59, 48, 0.12) !important;
+    transition: 0.2s ease-in-out all;
+}
 
-    /* El menú cubre EXACTAMENTE la columna */
-    .node_table__column_menu {
-    position: absolute;
-    inset: 0;                     /* top:0; right:0; bottom:0; left:0 */
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 bloques iguales */
-    align-items: stretch;
-    justify-items: stretch;
-    z-index: 5;
-    box-sizing: border-box;
-    border: none;                 /* evita sumar ancho extra */
-    pointer-events: auto;
-    }
+/* El menú cubre EXACTAMENTE la columna */
+.node_table__column_menu {
+position: absolute;
+inset: 0;                     /* top:0; right:0; bottom:0; left:0 */
+display: grid;
+grid-template-columns: repeat(3, 1fr); /* 3 bloques iguales */
+align-items: stretch;
+justify-items: stretch;
+z-index: 5;
+box-sizing: border-box;
+border: none;                 /* evita sumar ancho extra */
+pointer-events: auto;
+}
 
-    .menu_item { 
-        display:flex; 
-        align-items:center; 
-        justify-content:center; 
-        width:100%; 
-        height:100%; 
-        border:0; 
-        background:transparent; 
-        cursor:pointer; 
-    }
+.menu_item { 
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+    width:100%; 
+    height:100%; 
+    border:0; 
+    background:transparent; 
+    cursor:pointer; 
+}
 
-    .menu_item img {
-        width: 30px;
-    }
+.menu_item img {
+    width: 30px;
+}
 
-    /* Colores */
-    .menu_red    { background: #ff5b57; }
-    .menu_yellow { background: #f3ef68; }
-    .menu_green  { background: #a6f4a6; }
+/* Colores */
+.menu_red    { background: #ff5b57; }
+.menu_yellow { background: #f3ef68; }
+.menu_green  { background: #a6f4a6; }
 
-    /* (Opcional) separadores finos entre bloques */
-    .menu_item + .menu_item {
-    border-left: 2px solid rgba(0,0,0,0.08);
-    }
+/* (Opcional) separadores finos entre bloques */
+.menu_item + .menu_item {
+border-left: 2px solid rgba(0,0,0,0.08);
+}
 
-    .menu_disabled { 
-        cursor:not-allowed !important; 
-        /* pointer-events:none;  */
-    }
+.menu_disabled { 
+    cursor:not-allowed !important; 
+    /* pointer-events:none;  */
+}
 
-    /* Opcional: feedback al pasar el mouse por los hotspots (handles) */
-    .node_table__column:hover > div[role="button"] {
-    filter: brightness(0.95);
-    }
+/* Opcional: feedback al pasar el mouse por los hotspots (handles) */
+.node_table__column:hover > div[role="button"] {
+filter: brightness(0.95);
+}
 
-    .node_table__add_column_button {
-        height: 43px;
-        width: 50px;
-        border: none;
-        color: #0A58FF;
-        background: transparent;
-        font-size: 30px;
-        font-weight: 800;
-        cursor: pointer;
-        border-radius: 0;
-    }
+.node_table__add_column_button {
+    height: 43px;
+    width: 50px;
+    border: none;
+    color: #0A58FF;
+    background: transparent;
+    font-size: 30px;
+    font-weight: 800;
+    cursor: pointer;
+    border-radius: 0;
+}
 
-    .node_table__column_separator {
-        height: 2px;
-        background: #BDBDBD;
-    }
+.node_table__column_separator {
+    height: 2px;
+    background: #BDBDBD;
+}
+
+/* Popup de tipos */
+.type_popup {
+  position: absolute;
+  z-index: 6;               /* encima del menú (z=5) */
+  top: -6px;
+  left: calc(100% - 160px); /* se “pega” al bloque verde */
+  min-width: 160px;
+  background: #fff;
+  border: 1.5px solid #D0D5DD;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  border-radius: 12px;
+  padding: 6px 0;
+}
+
+.type_item {
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: 0;
+  font-size: 18px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.type_item:hover {
+  background: #F2F6FF;         /* azul muy tenue */
+}
+
+.type_item_active {
+  background: #CFE3FF;         /* seleccionado */
+  font-weight: 600;
+}
+
+
+/* Popup de tipos renderizado en document.body (fuera del nodo) */
+.type_popup_portal {
+  position: fixed;        /* clave: fuera del flujo del nodo */
+  z-index: 2000;          /* por encima del node/handles/menú */
+  min-width: 170px;
+  background: #fff;
+  border: 1.5px solid #D0D5DD;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  border-radius: 12px;
+  padding: 6px 0;
+}
+

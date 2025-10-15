@@ -26,10 +26,25 @@
 }
 
 .validator_message {
-    padding: 20px 0 0 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px 0 0 100px;
     border-top: solid 5px #AAAA;
     overflow-y: auto;
     max-height: 48%;
+    height: 48%;
+}
+
+.validator_message h2 {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.validator_message__title_container {
+    display: flex;
+    align-items: center;
+    gap: 30px;
 }
 
 .validator_message h2 {

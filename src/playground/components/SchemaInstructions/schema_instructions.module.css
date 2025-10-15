@@ -1,0 +1,51 @@
+.information_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    /* padding: 0 50px; */
+    gap: 100px;
+}
+
+.information {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.information p {
+    width: 500px;
+    font-size: 20px;
+}
+
+.information img {
+    height: 50px;
+    width: 100px;
+    object-fit: contain;
+}
+
+.schema_imf_container {
+    display: flex;
+    align-items: center;
+}
+
+.schema_imf_container img {
+    width: 350px;
+}
+
+.rectangle_example {
+    width: 30px;
+    height: 70px;
+    margin: 0 35px;
+    background-color: rgba(10, 88, 255, 0.10);
+}
+
+.rectangle_example_red {
+    background-color: rgba(255, 59, 48, 0.12);
+}
+
+.exit_button_container {
+    display: flex;
+    justify-content: end;
+}

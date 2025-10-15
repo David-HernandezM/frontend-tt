@@ -7,15 +7,17 @@ interface Props extends PropsWithChildren {
     linkData?: {
         url: string;
     };
-    onClick?: () => void
+    onClick?: () => void,
+    isRed?: boolean
 }
 
-export const Button = ({linkData, onClick = () => {}, children}: Props) => {
+export const Button = ({linkData, onClick = () => {}, isRed = false, children}: Props) => {
   return linkData ? (
     <Link
         className={cx(
           styles.button,
           styles.button_a,
+          isRed && styles.button_red
         )}
         to={linkData.url}
     >
@@ -23,7 +25,10 @@ export const Button = ({linkData, onClick = () => {}, children}: Props) => {
     </Link>
   ) : (
     <button
-        className={styles.button}
+        className={cx(
+          styles.button,
+          isRed && styles.button_red
+        )}
         onClick={onClick}
     >
         { children }

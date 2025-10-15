@@ -5,9 +5,10 @@ import styles from './code_editor.module.css';
 interface Props {
     code: string,
     onCodeChange: (code: string) => void,
+    disabled?: boolean
 }
 
-export const CodeEditor = ({code, onCodeChange = (code: string) => {}}: Props) => {
+export const CodeEditor = ({code, onCodeChange = (_: string) => {}, disabled = false}: Props) => {
   return (
      <div
         className={styles.playground_code__editor_container}
@@ -15,11 +16,11 @@ export const CodeEditor = ({code, onCodeChange = (code: string) => {}}: Props) =
         <CodeMirror
             className={styles.playground_code__codemirror}
             value={code}
-            // minHeight='240PX'
             extensions={[sql()]}
-            editable={true}
+            editable={!disabled}
             placeholder='Ingresa tu consulta'
             onChange={(value, _) => {
+                if (disabled) return;
                 onCodeChange(value);
             }}
         />
