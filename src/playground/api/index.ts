@@ -14,7 +14,7 @@ export const api = axios.create({ baseURL: BASE_URL });
 
 export const validateSchema = async (data: any): Promise<ApiResponse> => {
     try {
-        const result = await api.post('sintaxis', data);
+        const result = await api.post('sintaxis', {});
         console.log("result axios;");
         console.log(result);
         return result.data;
@@ -34,13 +34,13 @@ export const transformQueryTest = async (data: any): Promise<ApiResponse> => {
 export function setupMocks() {
     const mock = new AxiosMockAdapter(api, { delayResponse: 2000 }); // ← delay global (ms)
 
-    mock.onPost("/sintaxis").reply((config) => {
-        const body = JSON.parse(config.data || "{}");
-        if (!body?.tables) return [400, { ok: false, error: "Missing tables" }];
-        if (!body?.sqlQuery) return [400, { ok: false, error: "Missing sqlQuery" }];
+    // mock.onPost("/sintaxis").reply((config) => {
+    //     const body = JSON.parse(config.data || "{}");
+    //     if (!body?.tables) return [400, { ok: false, error: "Missing tables" }];
+    //     if (!body?.sqlQuery) return [400, { ok: false, error: "Missing sqlQuery" }];
 
-        return [200, { ok: true, message: "Consulta valida", errors: [] }];
-    });
+    //     return [200, { ok: true, message: "Consulta valida", errors: [] }];
+    // });
 
     mock.onPost("/sintaxisE").reply((config) => {
         const body = JSON.parse(config.data || "{}");
@@ -116,5 +116,5 @@ export function setupMocks() {
 // úsalo sólo en dev
 if (import.meta.env.VITE_MODE !== "production") {
     console.log("IS NOT OR PRODUCTION");
-  setupMocks();
+    setupMocks();
 }

@@ -117,14 +117,16 @@ export const PlayGround = () => {
             code={code} 
             onCodeChange={(newCode) => setCode(newCode)} 
             onValidateSchema={async () => {
-              setValidationResult(null);
-              setIsLoadingVerificationResult(true);
+              // setValidationResult(null);
+              // setIsLoadingVerificationResult(true);
               
               const data = buildSchemaJSON(nodes, edges, code);
 
               const result = await validateSchema(data);
 
               console.log(result);
+
+              return;
 
               setIsLoadingVerificationResult(false);
 

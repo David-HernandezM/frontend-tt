@@ -20,7 +20,6 @@ export const makeFieldId = (() => { let c = 0; return () => `f_${Date.now().toSt
 export const makeNodeId  = (() => { let c = 0; return () => `t_${Date.now().toString(36)}_${(c++).toString(36)}`; })();
 export const nextPosition = (i: number) => ({ x: 100 + (i % 3) * 400, y: 80 + Math.floor(i / 3) * 220 });
 
-/* lanes para separar conexiones */
 const LANE_COUNT = 6;
 const LANE_STEP  = 10;
 
@@ -74,7 +73,6 @@ export function TableNode({ id, data }: NodeProps) {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
 
-  // Cerrar todo al click fuera
   useEffect(() => {
     const closeAll = (e: MouseEvent) => {
       const t = e.target as Element | null;
@@ -88,8 +86,6 @@ export function TableNode({ id, data }: NodeProps) {
     document.addEventListener('mousedown', closeAll);
     return () => document.removeEventListener('mousedown', closeAll);
   }, []);
-
-  // const _DATA_TYPES: DataType[] = ['INT', 'DATE', 'VARCHAR'];
 
   return (
     <div className={styles.node_table}>
@@ -138,7 +134,7 @@ export function TableNode({ id, data }: NodeProps) {
               onMouseEnter={() => setHoverFieldId(field.id)}
               onMouseLeave={guardLeave}
             >
-              {/* AZUL visible (target) */}
+              {/* AZUL visible */}
               <Handle
                 className={cx(showHandlers ? styles.node_handler__blue : styles.node_handler_transparent)}
                 type="target"
@@ -146,7 +142,7 @@ export function TableNode({ id, data }: NodeProps) {
                 position={Position.Left}
                 style={{ left: 0, top: 0, transform: 'none', width: 12, height: '100%', border: 'none', borderRadius: 0, cursor: 'crosshair' }}
               />
-              {/* AZUL ocultos (source) – lanes */}
+              {/* AZUL ocultos */}
               {Array.from({ length: LANE_COUNT }).map((_, lane) => (
                 <Handle
                   key={`blue-${lane}`}
@@ -166,7 +162,7 @@ export function TableNode({ id, data }: NodeProps) {
                 type="text"
               />
 
-              {/* ROJO visible (source) */}
+              {/* ROJO visible */}
               <Handle
                 className={cx(showHandlers ? styles.node_handler__red : styles.node_handler_transparent)}
                 type="source"
@@ -174,7 +170,7 @@ export function TableNode({ id, data }: NodeProps) {
                 position={Position.Right}
                 style={{ right: 0, top: 0, transform: 'none', width: 12, height: '100%', border: 'none', borderRadius: 0, cursor: 'crosshair' }}
               />
-              {/* ROJO ocultos (target) – lanes */}
+              {/* ROJO ocultos */}
               {Array.from({ length: LANE_COUNT }).map((_, lane) => (
                 <Handle
                   key={`red-${lane}`}
@@ -232,9 +228,8 @@ export function TableNode({ id, data }: NodeProps) {
                       e.stopPropagation();
                       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
                       setTypePopupFieldId(field.id);
-                      // a la derecha del bloque verde, levemente arriba
                       setTypePopupPos({ x: rect.right, y: rect.top - 6 });
-                      setMenuFieldId(field.id);  // mantenemos el menú abierto
+                      setMenuFieldId(field.id); 
                     }}
                     title="Seleccionar tipo"
                   >
