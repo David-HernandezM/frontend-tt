@@ -117,16 +117,14 @@ export const PlayGround = () => {
             code={code} 
             onCodeChange={(newCode) => setCode(newCode)} 
             onValidateSchema={async () => {
-              // setValidationResult(null);
-              // setIsLoadingVerificationResult(true);
+              setValidationResult(null);
+              setIsLoadingVerificationResult(true);
               
               const data = buildSchemaJSON(nodes, edges, code);
 
               const result = await validateSchema(data);
 
               console.log(result);
-
-              return;
 
               setIsLoadingVerificationResult(false);
 
@@ -167,8 +165,10 @@ export const PlayGround = () => {
 
               setIsLoadingAlgebraResult(true);
 
+              console.log("mandando a dormir el proceso");
               const transformResult = await transformQueryTest(data);
-
+              console.log("desperto!!!");
+              
               setAlgebraCode(transformResult.message);
               setIsLoadingAlgebraResult(false);
 

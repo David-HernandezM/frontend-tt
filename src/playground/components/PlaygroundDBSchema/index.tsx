@@ -93,7 +93,7 @@ export const PlaygroundDBSchema = ({
         position: nextPosition(nds.length),
         dragHandle: '.drag-handle',
         data: {
-          title: `Tabla ${nds.length + 1}`,
+          title: `tabla${nds.length + 1}`,
           fields: [{ id: makeFieldId(), label: 'Columna1' }],
         } as TableData,
       };
