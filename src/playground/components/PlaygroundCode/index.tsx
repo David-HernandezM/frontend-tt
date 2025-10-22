@@ -67,9 +67,21 @@ export const PlaygroundCode = ({code, onCodeChange = (_code: string) => {}, onVa
                     {
                         (!validationResult.ok) && (
                             validationResult.errors.map(error => {
-                                return <p>
-                                    ❌ {error}
-                                </p>
+                                return <div
+                                    style={{
+                                        display: "flex",
+                                        gap: "20px"
+                                    }}
+                                >
+                                    <p>❌</p>
+                                    <p
+                                        style={{
+                                            width: "90%"
+                                        }}
+                                    >
+                                        {error}
+                                    </p>
+                                </div>
                             })
                         )
                     }
