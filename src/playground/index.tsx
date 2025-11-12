@@ -5,7 +5,7 @@ import { PlaygroundDBSchema } from './components/PlaygroundDBSchema';
 import { PlaygroundCode } from './components/PlaygroundCode';
 import { SchemaInstructions } from './components/SchemaInstructions';
 import { CodeInstructions } from './components/CodeInstructions';
-import { validateSchema, transformQueryTest } from './api';
+import { validateSchema, transformQuery } from './api';
 import { buildSchemaJSON } from '../utils';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { ConvertionResultPage } from './components/ConvertionResultPage';
@@ -124,12 +124,8 @@ export const PlayGround = () => {
 
               const result = await validateSchema(data);
 
-              console.log(result);
-
               setIsLoadingVerificationResult(false);
 
-              console.log("result");
-              console.log(result);
               setValidationResult(result);
 
               let lastActiveButtons = [...activeButtons];
@@ -138,7 +134,7 @@ export const PlayGround = () => {
               setActiveButtons(lastActiveButtons);
 
               if (!result.ok) {
-                console.log("EL RESULTADO NO FUE CORRECTO");
+                console.log("Resultado incorrecto");
                 return;
               }
 
@@ -146,30 +142,24 @@ export const PlayGround = () => {
               const schemaData = getSchemasData(currentSchemaId);
 
               if (!schemaData) {
-                console.log("NO EXISTE GUARDANDO!");
                 const resultSaveSchema = addSchemaData(data);
-                // const activeButtons = [...lastActiveButtons]
 
                 if (!resultSaveSchema) {
-                  console.error("Error al guardar los datos!");
                   setOpenErrorModal(true);
                   return;
                 }
               } else {
-                console.log("YA EXISTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+                console.log("schema ya existe");
               }
-              
 
               lastActiveButtons[2] = true;
               setActiveButtons(lastActiveButtons);
 
               setIsLoadingAlgebraResult(true);
 
-              console.log("mandando a dormir el proceso");
-              const transformResult = await transformQueryTest(data);
-              console.log("desperto!!!");
+              const transformResult = await transformQuery(data);
               
-              setAlgebraCode(transformResult.message);
+              setAlgebraCode(transformResult);
               setIsLoadingAlgebraResult(false);
 
               

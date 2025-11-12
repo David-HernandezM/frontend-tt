@@ -10,6 +10,11 @@ export interface ApiResponse {
     message: string
 }
 
+export interface ApiConvertionResponse {
+    algebraRelacional: string,
+    pasos: string[]
+}
+
 interface ServerResponse {
     tipo: string;
     contenido: string;
@@ -17,9 +22,6 @@ interface ServerResponse {
 }
 
 export const api = axios.create({ baseURL: BASE_URL });
-// export const mock = new MockAdapter(api);
-
-// mock.onPost('transform').reply(200, );
 
 const formatMessages = (messages: ServerResponse[], isOk: boolean): ApiResponse => {
     const response: ApiResponse = {
@@ -37,26 +39,71 @@ const formatMessages = (messages: ServerResponse[], isOk: boolean): ApiResponse 
     return response;
 }
 
+const formatSteps = (steps: string[]): string => {
+    const newSteps = steps.map(step => `${step}\n`);
+    return newSteps.join('');
+}
+
+const getApiResponse = async (url: string, data: any) => {
+    return new Promise<ApiResponse | string>(async (resolve, reject) => {
+        try {
+            const result = (await api.post(url, data)).data;
+
+            if ("mensajes" in result) {
+                resolve(formatMessages(result.mensajes, true));
+            } else {
+                resolve(formatSteps(result.pasos));
+            }
+        } catch(error: any) {
+            const errors = formatMessages(error.response.data.mensajes, false);
+            reject(errors);
+        }
+    });
+}
+
+
 export const validateSchema = async (data: any): Promise<ApiResponse> => {
     try {
-        const result = await api.post('sintaxis', data);
-        console.log("result axios;");
-        console.log(result);
-        const response = formatMessages(result.data.mensajes, true);
-        return response;
+        return await getApiResponse('sintaxis', data) as ApiResponse;
     } catch(error: any) {
-        console.log("ERRORRR EN AXIOS");
-        console.log(error);
-        const response = formatMessages(error.response.data.mensajes, false);
-        return response;
+        return error;
     }
+    // try {
+    //     const result = await api.post('sintaxis', data);
+    //     console.log("result axios;");
+    //     console.log(result);
+    //     const response = formatMessages(result.data.mensajes, true);
+    //     return response;
+    // } catch(error: any) {
+    //     console.log("ERRORRR EN AXIOS");
+    //     console.log(error);
+    //     const response = formatMessages(error.response.data.mensajes, false);
+    //     return response;
+    // }
 };
 
-// export const transformQueryTest = async (data: any): Promise<ApiResponse> => {
-//     const result = await api.post('transform', data);
+export const transformQuery = async (data: any): Promise<string> => {
+    try {
+        return await getApiResponse('convert', data) as string;
+    } catch (error: any) {
+        return error;
+    }
+    // return new Promise(async (resolve, reject) => {
+    //     try {
+    //         const result = await api.post('sintaxis', data);
+    //         console.log("result axios;");
+    //         console.log(result);
+    //         const response = formatMessages(result.data.mensajes, true);
+    //         return response;
+    //     } catch(error: any) {
+    //         console.log("ERRORRR EN AXIOS");
+    //         console.log(error);
+    //         const response = formatMessages(error.response.data.mensajes, false);
+    //         return response;
+    //     }
+    // });
+}
 
-//     return result.data;
-// }
 
 
 export const transformQueryTest = async (_data: any): Promise<ApiResponse> => {
