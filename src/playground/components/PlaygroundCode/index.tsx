@@ -15,7 +15,6 @@ interface Props {
 
 export const PlaygroundCode = ({code, onCodeChange = (_code: string) => {}, onValidateSchema, validationResult, isLoading}: Props) => {
     const [openModal, setOpenModal] = useState(false);
-    // const [isLoading, setIsLoading] = useState(false);
 
     return (
     <div

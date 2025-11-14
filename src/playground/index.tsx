@@ -37,7 +37,6 @@ export const PlayGround = () => {
   } = useLocalStorage();
   const [buttonsSelected, setButtonsSelected] = useState([true, false, false, false]);
   const [activeButtons, setActiveButtons] = useState([true, false, false,  (getShemasHistory()?getShemasHistory()!:[]).length > 0]);
-  // const [activeButtons, setActiveButtons] = useState([true, true, true, true]);
   const [code, setCode] = useState("");
   const [algebraCode, setAlgebraCode] = useState("");
   const [isLoadingVerificationResult, setIsLoadingVerificationResult] = useState(false);

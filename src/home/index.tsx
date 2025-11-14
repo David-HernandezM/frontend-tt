@@ -68,6 +68,7 @@ export const Home = () => {
             ))
           }
         </div>
+        {/* Seccion donde se encuentra la informacion de porque aprender álgebra relacional */}
         <section
           className={styles.home__information_container}
         >
@@ -118,3 +119,4 @@ export const Home = () => {
       </div>
   )
 }
+

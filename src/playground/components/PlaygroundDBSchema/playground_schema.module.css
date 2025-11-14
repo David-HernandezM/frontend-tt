@@ -5,6 +5,10 @@
     position: relative;
 }
 
+.playground a {
+    display: none;
+}
+
 .playground > button {
     position: absolute;
     top: 1rem;
