@@ -1,22 +1,37 @@
-// api/sintaxis.js  (Vercel Node.js Serverless Function)
-
 export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.status(405).send('Method Not Allowed');
+    return;
+  }
+
   const backendUrl = 'http://18.220.223.115:8080/api/sintaxis';
 
   try {
+    let rawBody = '';
+    for await (const chunk of req) {
+      rawBody += chunk;
+    }
+
     const backendRes = await fetch(backendUrl, {
-      method: req.method,
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'content-type': req.headers['content-type'] || 'application/json',
       },
-      body: req.method === 'POST' ? undefined : JSON.stringify(req.body || {}),
+      body: rawBody, // se manda tal cual al Spring
     });
 
-    const text = await backendRes.text();
-
-    res.status(backendRes.status).send(text);
+    const contentType = backendRes.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      const data = await backendRes.json();
+      res.status(backendRes.status).json(data);
+    } else {
+      const text = await backendRes.text();
+      res.status(backendRes.status).send(text);
+    }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Error while connecting with the backend' });
+    res.status(500).json({
+      mensajes: [{ tipoDetallado: 'Error', contenido: 'Error al conectar con el backend' }],
+    });
   }
 }
