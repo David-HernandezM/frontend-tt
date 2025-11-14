@@ -68,18 +68,6 @@ export const validateSchema = async (data: any): Promise<ApiResponse> => {
     } catch(error: any) {
         return error;
     }
-    // try {
-    //     const result = await api.post('sintaxis', data);
-    //     console.log("result axios;");
-    //     console.log(result);
-    //     const response = formatMessages(result.data.mensajes, true);
-    //     return response;
-    // } catch(error: any) {
-    //     console.log("ERRORRR EN AXIOS");
-    //     console.log(error);
-    //     const response = formatMessages(error.response.data.mensajes, false);
-    //     return response;
-    // }
 };
 
 export const transformQuery = async (data: any): Promise<string> => {
@@ -88,20 +76,6 @@ export const transformQuery = async (data: any): Promise<string> => {
     } catch (error: any) {
         return error;
     }
-    // return new Promise(async (resolve, reject) => {
-    //     try {
-    //         const result = await api.post('sintaxis', data);
-    //         console.log("result axios;");
-    //         console.log(result);
-    //         const response = formatMessages(result.data.mensajes, true);
-    //         return response;
-    //     } catch(error: any) {
-    //         console.log("ERRORRR EN AXIOS");
-    //         console.log(error);
-    //         const response = formatMessages(error.response.data.mensajes, false);
-    //         return response;
-    //     }
-    // });
 }
 
 
