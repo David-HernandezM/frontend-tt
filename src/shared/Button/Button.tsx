@@ -8,10 +8,11 @@ interface Props extends PropsWithChildren {
         url: string;
     };
     onClick?: () => void,
-    isRed?: boolean
+    isRed?: boolean,
+    classname?: String
 }
 
-export const Button = ({linkData, onClick = () => {}, isRed = false, children}: Props) => {
+export const Button = ({linkData, onClick = () => {}, isRed = false, classname, children}: Props) => {
   return linkData ? (
     <Link
         className={cx(
@@ -27,7 +28,8 @@ export const Button = ({linkData, onClick = () => {}, isRed = false, children}: 
     <button
         className={cx(
           styles.button,
-          isRed && styles.button_red
+          isRed && styles.button_red,
+          classname
         )}
         onClick={onClick}
     >

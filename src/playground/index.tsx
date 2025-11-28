@@ -13,6 +13,7 @@ import { HistoryPage } from './components/HistoryPage';
 import { Button } from '../shared/Button/Button';
 // import { importSchemaJSON } from '../utils/scchemaHelper';
 import { importSchemaJSON } from '../utils';
+import type { ArbolPayload } from '../utils/buildTreeGraph';
 import HelpIcon from '../assets/help_icon.svg';
 import styles from './styles/playground.module.css';
 
@@ -38,7 +39,7 @@ export const PlayGround = () => {
   const [buttonsSelected, setButtonsSelected] = useState([true, false, false, false]);
   const [activeButtons, setActiveButtons] = useState([true, false, false,  (getShemasHistory()?getShemasHistory()!:[]).length > 0]);
   const [code, setCode] = useState("");
-  const [algebraCode, setAlgebraCode] = useState("");
+  const [tree, setTree] = useState<ArbolPayload>();
   const [isLoadingVerificationResult, setIsLoadingVerificationResult] = useState(false);
   const [isLoadingAlgebraResult, setIsLoadingAlgebraResult] = useState(true);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -121,7 +122,11 @@ export const PlayGround = () => {
               
               const data = buildSchemaJSON(nodes, edges, code);
 
+              console.log(data);
+
               const result = await validateSchema(data);
+
+              console.log("termino validacion")
 
               setIsLoadingVerificationResult(false);
 
@@ -156,12 +161,21 @@ export const PlayGround = () => {
 
               setIsLoadingAlgebraResult(true);
 
+              console.log("comenzando transformacion")
               const transformResult = await transformQuery(data);
-              
-              setAlgebraCode(transformResult);
-              setIsLoadingAlgebraResult(false);
 
-              
+              console.log("RESULTADO DE LA MMDAAAAA ");
+              console.log(transformResult);
+
+              console.log("avr");
+              console.log(JSON.stringify(data))
+
+              // setAlgebraCode(transformResult);
+              setTree({
+                algebraRelacional: transformResult.algebraRelacional,
+                ...transformResult.arbol,
+              });
+              setIsLoadingAlgebraResult(false);
             }}
             validationResult={validationResult}
           /> 
@@ -170,7 +184,8 @@ export const PlayGround = () => {
           buttonsSelected[2] && 
           <ConvertionResultPage
             code={code}
-            algebraCode={algebraCode}
+            tree={tree as ArbolPayload}
+            // algebraCode={algebraCode}
             isLoading={isLoadingAlgebraResult}
           />
         }

@@ -20,8 +20,11 @@ export const makeFieldId = (() => { let c = 0; return () => `f_${Date.now().toSt
 export const makeNodeId  = (() => { let c = 0; return () => `t_${Date.now().toString(36)}_${(c++).toString(36)}`; })();
 export const nextPosition = (i: number) => ({ x: 100 + (i % 3) * 400, y: 80 + Math.floor(i / 3) * 220 });
 
-const LANE_COUNT = 6;
-const LANE_STEP  = 10;
+// const LANE_COUNT = 6;
+// const LANE_STEP  = 10;
+const LANE_STEP = 18;        // antes 10 → más aire horizontal
+const LANE_Y_JITTER = 4;     // px de “escalón” vertical por lane
+const SIDE_INSET = 8;        // mueve el anclaje ~8px hacia adentro del campo
 
 type Field = {
   id: string;
@@ -43,13 +46,15 @@ export type TableData = {
   onTogglePk?: (fieldId: string, value: boolean) => void;
   onToggleType?: (fieldId: string, value: boolean) => void;
   onSetDataType?: (fieldId: string, type: DataType) => void;
+  isTypeLocked?: (fieldId: string) => boolean;
+  lanesFor?: (fieldId: string) => { src: number; tgt: number };
 };
 
 /* --------- nodo --------- */
 export function TableNode({ id, data }: NodeProps) {
   const {
     title, fields, onAddField, onRemove, onRenameTitle, onRenameField,
-    onDeleteField, onTogglePk, onToggleType, onSetDataType
+    onDeleteField, onTogglePk, onToggleType, onSetDataType, isTypeLocked, lanesFor
   } = data as TableData;
 
   const update = useUpdateNodeInternals();
@@ -114,6 +119,10 @@ export function TableNode({ id, data }: NodeProps) {
           const showHandlers = hoverFieldId === field.id;
           const canDelete = fields.length > 1;
 
+          // TODO
+          const lanes = lanesFor?.(field.id) ?? { src: 6, tgt: 6 };
+
+
           const guardLeave = (e: React.MouseEvent) => {
             const next = e.relatedTarget as Node | null;
             const toMenu  = !!(menuRef.current  && next && menuRef.current.contains(next));
@@ -142,14 +151,30 @@ export function TableNode({ id, data }: NodeProps) {
                 position={Position.Left}
                 style={{ left: 0, top: 0, transform: 'none', width: 12, height: '100%', border: 'none', borderRadius: 0, cursor: 'crosshair' }}
               />
+
+              
               {/* AZUL ocultos */}
-              {Array.from({ length: LANE_COUNT }).map((_, lane) => (
+              {/* {Array.from({ length: LANE_COUNT }).map((_, lane) => (
                 <Handle
                   key={`blue-${lane}`}
                   type="source"
                   id={`${field.id}-in-src-btm-${lane}`}
                   position={Position.Bottom}
                   style={{ left: 0 + lane * LANE_STEP, width: 12, height: 8, bottom: -2, background: 'transparent', border: 'none', pointerEvents: 'none' }}
+                />
+              ))} */}
+              {Array.from({ length: lanes.src }).map((_, lane) => (
+                <Handle
+                  key={`blue-${lane}`}
+                  type="source"
+                  id={`${field.id}-in-src-btm-${lane}`}
+                  position={Position.Bottom}
+                  style={{
+                    left: SIDE_INSET + lane * LANE_STEP, // lane * 10,  // si quieres más separación, sube el “10”
+                    width: 12, height: 8, 
+                    bottom: -2,
+                    background: 'transparent', border: 'none', pointerEvents: 'none'
+                  }}
                 />
               ))}
 
@@ -171,13 +196,27 @@ export function TableNode({ id, data }: NodeProps) {
                 style={{ right: 0, top: 0, transform: 'none', width: 12, height: '100%', border: 'none', borderRadius: 0, cursor: 'crosshair' }}
               />
               {/* ROJO ocultos */}
-              {Array.from({ length: LANE_COUNT }).map((_, lane) => (
+              {/* {Array.from({ length: LANE_COUNT }).map((_, lane) => (
                 <Handle
                   key={`red-${lane}`}
                   type="target"
                   id={`${field.id}-out-tgt-btm-${lane}`}
                   position={Position.Bottom}
                   style={{ left: `calc(100% - 12px - ${lane * LANE_STEP}px)`, width: 12, height: 8, bottom: -2, background: 'transparent', border: 'none', pointerEvents: 'none' }}
+                />
+              ))} */}
+              {Array.from({ length: lanes.tgt }).map((_, lane) => (
+                <Handle
+                  key={`red-${lane}`}
+                  type="target"
+                  id={`${field.id}-out-tgt-btm-${lane}`}
+                  position={Position.Bottom}
+                  style={{
+                    left: `calc(100% - ${SIDE_INSET + 12 + lane * LANE_STEP}px)`, //`calc(100% - 12px - ${lane * 10}px)`,
+                    width: 12, height: 8, 
+                    bottom: -2,
+                    background: 'transparent', border: 'none', pointerEvents: 'none'
+                  }}
                 />
               ))}
 
@@ -223,8 +262,13 @@ export function TableNode({ id, data }: NodeProps) {
 
                   {/* verde: abrir POPUP tipos */}
                   <button
-                    className={cx(styles.menu_item, styles.menu_green)}
+                    className={cx(
+                      styles.menu_item, 
+                      styles.menu_green,
+                      (isTypeLocked?.(field.id)) && styles.menu_disabled
+                    )}
                     onClick={(e) => {
+                      if (isTypeLocked?.(field.id)) return;
                       e.stopPropagation();
                       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
                       setTypePopupFieldId(field.id);

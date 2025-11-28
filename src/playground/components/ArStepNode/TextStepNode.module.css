@@ -1,0 +1,63 @@
+.node {
+  min-width: 220px;
+  max-width: 360px;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  padding: 10px;
+  font-family: Inter, system-ui, Arial, sans-serif;
+}
+
+.nodeSelected {
+  box-shadow: 0 0 0 2px #2563eb, 0 6px 18px rgba(0, 0, 0, 0.1);
+  border-color: #2563eb;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.badgeFase {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  background: #eef2ff;
+  color: #3730a3;
+  border-radius: 999px;
+}
+
+.badgeStep {
+  font-size: 12px;
+  padding: 2px 8px;
+  background: #f1f5f9;
+  color: #0f172a;
+  border-radius: 999px;
+}
+
+.label {
+  font-size: 12px;
+  color: #475569;
+  margin-bottom: 4px;
+  margin-top: 8px;
+}
+
+.sqlBox {
+  margin: 0;
+  padding: 8px;
+  background: #f8fafc;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  white-space: pre-wrap;
+}
+
+.arBox {
+  margin: 0;
+  padding: 8px;
+  background: #f0fdf4;
+  border-radius: 6px;
+  border: 1px solid #bbf7d0;
+  white-space: pre-wrap;
+}

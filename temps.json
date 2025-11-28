@@ -1,0 +1,3 @@
+{
+"algebraRelacional": "π[FechaNac, Direccion](σ[Nombre = 'Jose' AND Apellido1 = 'Perez' AND Apellido2 = 'Perez'](EMPLEADO))"
+}

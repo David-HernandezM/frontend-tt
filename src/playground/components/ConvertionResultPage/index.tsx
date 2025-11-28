@@ -1,20 +1,30 @@
 import { CodeEditor } from '../CodeEditor';
 import { useEffect, useState } from 'react';
 import { Loader } from '../../../shared/Loader';
+import { ArTreeViewer } from '../ArTreeViewer';
+import type { ArbolPayload } from '../../../utils/buildTreeGraph';
 import styles from './convertion_result.module.css';
+import { Modal } from '../../../shared/Modal';
+import { Button } from '../../../shared/Button/Button';
+import cx from "clsx";
 
 interface Props {
     code: string,
-    algebraCode: string,
-    isLoading: boolean
+    // algebraCode: string,
+    isLoading: boolean,
+    tree: ArbolPayload
 }
 
-export const ConvertionResultPage = ({code, algebraCode, isLoading = true}: Props) => {
+export const ConvertionResultPage = ({code, tree, isLoading = true}: Props) => {
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    console.log(tree)
     const [isLoadingPage, setIsLoading] = useState(isLoading);
+
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         console.log("Cambio el algebra");
-    }, [algebraCode]);
+    }, [tree]);
 
     useEffect(() => {
         console.log("cambio el is loading");
@@ -42,6 +52,7 @@ export const ConvertionResultPage = ({code, algebraCode, isLoading = true}: Prop
             >
                 <CodeEditor 
                     code={code}
+                    // code={'h\nh\nh\nh\nh\nh\nh\nh\nh\nh\nh\nh\n'}
                     onCodeChange={(_) => {}}
                     disabled={true}
                 />
@@ -61,23 +72,48 @@ export const ConvertionResultPage = ({code, algebraCode, isLoading = true}: Prop
                         <Loader/>
                     </div>
                 ) : (
-                    <h2>Conversión:</h2>
+                    <div
+                        className={cx(
+                            styles.validator_message__title_container,
+                            styles.validator_message__title_container__between,
+                        )}
+                    >
+                        <h2>Conversión:</h2>
+                        <Button
+                            onClick={() => setModalOpen(true)}
+                        >
+                            Pantalla completa
+                        </Button>
+                    </div>
                 )
             }
             {
                 !isLoadingPage && (
                     <div
-                        style={{width: "90%"}}
+                        className={styles.small_tree}
                     >
-                        <CodeEditor 
-                            code={algebraCode}
-                            onCodeChange={(_) => {}}
-                            disabled={true}
-                        />
+                        <ArTreeViewer data={tree}/>
                     </div>
                 )
             }            
         </div>
+        <Modal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            title='Árbol'
+        >
+            <div
+                className={cx(styles.tree_popup)}
+            >
+                <ArTreeViewer data={tree}/>
+                <Button
+                    classname={styles.tree_popup__button}
+                    onClick={() => setModalOpen(false)}
+                >
+                    Cerrar
+                </Button>
+            </div>
+        </Modal>
     </div>
     )
 }

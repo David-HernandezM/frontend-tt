@@ -13,15 +13,32 @@ import { MarkerType } from '@xyflow/react';
 import { SmartStepEdge } from '@tisoap/react-flow-smart-edge';
 import styles from './playground_schema.module.css';
 import '@xyflow/react/dist/style.css';
+import { SmoothStepEdge, type EdgeProps } from '@xyflow/react';
+
+
+
+export const OffsetSmoothStepEdge = (props: EdgeProps) => {
+  const offset = (props.data?.offset as number) ?? 0;
+  const borderRadius = (props.data?.borderRadius as number) ?? 10;
+
+  return (
+    <SmoothStepEdge
+      {...props}
+      pathOptions={{ offset, borderRadius }}
+    />
+  );
+};
 
 const defaultEdgeOptions = {
-  type: 'step',
+  type: 'osmooth', //'smoothstep',
   markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16 },
   style: { stroke: '#9aa0a6', strokeWidth: 2 },
-  pathOptions: { offset: 8, borderRadius: 4 },
+  // pathOptions: { offset: 12, borderRadius: 6 },
+  // pathOptions: { borderRadius: 10 },
 } as const;
 
-const edgeTypes = { smart: SmartStepEdge };
+// const edgeTypes = { smart: SmartStepEdge };
+const edgeTypes = { osmooth: OffsetSmoothStepEdge };
 
 /** ---------- helpers lanes/handles ---------- */
 const LANE_COUNT = 6;
@@ -42,12 +59,7 @@ const laneFromHandle = (h?: string | null) => {
   return m2 ? parseInt(m2[1], 10) : null;
 };
 
-const nextLane = (used: number[], max = LANE_COUNT) => {
-  for (let i = 0; i < max; i++) if (!used.includes(i)) return i;
-  return used.length % max;
-};
 
-/** Aplica tipo a un campo (y marca hasType) */
 function applyTypeToField(nodes: Node[], nodeId: string, fieldId: string, type: DataType): Node[] {
   return nodes.map((n) => {
     if (n.id !== nodeId) return n;
@@ -64,6 +76,7 @@ function applyTypeToField(nodes: Node[], nodeId: string, fieldId: string, type: 
   });
 }
 
+
 /** estilos base/destacado para edges */
 const EDGE_BASE = { stroke: '#9aa0a6', strokeWidth: 2 };
 const EDGE_HIGHLIGHT = { stroke: '#2563eb', strokeWidth: 3 };
@@ -76,6 +89,10 @@ interface Props {
   onNodesChange: any;
   onEdgesChange: any;
 }
+
+const errores = [
+  "No se puede crear la llave foránea, no se encontró ninguna llave primaria",
+]
 
 export const PlaygroundDBSchema = ({
   nodes, edges, setEdges, setNodes, onEdgesChange, onNodesChange
@@ -101,6 +118,34 @@ export const PlaygroundDBSchema = ({
     });
   };
 
+    // 👇 helpers para saber si un field es FK (tiene edges saliendo)
+  const isFieldFK = (nodeId: string, fieldId: string): boolean =>
+    edges.some(
+      (e) =>
+        e.source === nodeId &&
+        e.sourceHandle?.startsWith(`${fieldId}-in-src-btm-`)
+    );
+
+  // 👇 (opcional) cuántos edges salen/entran por field — lo usamos en #2
+  const degreeMaps = (() => {
+    const outDeg = new Map<string, number>(); // key: `${nodeId}:${fieldId}`
+    const inDeg  = new Map<string, number>(); // key: `${nodeId}:${fieldId}`
+
+    for (const e of edges) {
+      const srcField = e.sourceHandle?.replace(/-(in|out|in-src-btm-\d+|out-tgt-btm-\d+)$/, '') || '';
+      const tgtField = e.targetHandle?.replace(/-(in|out|in-src-btm-\d+|out-tgt-btm-\d+)$/, '') || '';
+      if (srcField) {
+        const k = `${e.source}:${srcField}`;
+        outDeg.set(k, (outDeg.get(k) ?? 0) + 1);
+      }
+      if (tgtField) {
+        const k = `${e.target}:${tgtField}`;
+        inDeg.set(k, (inDeg.get(k) ?? 0) + 1);
+      }
+    }
+    return { outDeg, inDeg };
+  })();
+
   const nodesWithActions: Node[] = useMemo(
     () =>
       nodes.map((n) => {
@@ -111,12 +156,24 @@ export const PlaygroundDBSchema = ({
           ...n,
           data: {
             ...(n.data as TableData),
+            isTypeLocked: (fieldId: string) => isFieldFK(nodeId, fieldId),
+            lanesFor: (fieldId: string) => {
+              const out = degreeMaps.outDeg.get(`${nodeId}:${fieldId}`) ?? 0;
+              const inn = degreeMaps.inDeg.get(`${nodeId}:${fieldId}`) ?? 0;
+              // deja un margen extra para que no se peguen
+              return {
+                src: Math.max(6, out + 2),
+                tgt: Math.max(6, inn + 2),
+              };
+            },
 
-            /** Selección de tipo desde popup.
-             *  Si la columna es PK => propagar a columnas conectadas (foráneas).
-             */
+
+
+       
             onSetDataType: (fieldId: string, type: DataType): void =>
               setNodes((prev) => {
+                if (isFieldFK(nodeId, fieldId)) return prev;
+                
                 let next = applyTypeToField(prev, nodeId, fieldId, type);
 
                 const owner = next.find((x) => x.id === nodeId);
@@ -145,11 +202,6 @@ export const PlaygroundDBSchema = ({
                   return { ...m, data: { ...d, fields: d.fields.filter((f) => f.id !== fieldId) } };
                 })
               ),
-
-            /** PK toggle:
-             *  - Al apagar la PK: eliminar TODAS las edges que lleguen a esa PK.
-             *  - Al encenderla: marcamos las conexiones se crean manualmente.
-             */
             onTogglePk: (fieldId: string, value: boolean): void => {
               setNodes((ns) =>
                 ns.map((m) => {
@@ -176,8 +228,10 @@ export const PlaygroundDBSchema = ({
             },
 
             onToggleType: (fieldId: string, value: boolean): void =>
-              setNodes((ns) =>
-                ns.map((m) => {
+              setNodes((ns) => {
+                if (isFieldFK(nodeId, fieldId)) return ns;
+
+                return ns.map((m) => {
                   if (m.id !== nodeId) return m;
                   const d = m.data as TableData;
                   return {
@@ -192,7 +246,7 @@ export const PlaygroundDBSchema = ({
                     },
                   };
                 })
-              ),
+              }),
 
             onAddField: (): void =>
               setNodes((nds) =>
@@ -210,12 +264,17 @@ export const PlaygroundDBSchema = ({
                 })
               ),
 
-            onRenameTitle: (value: string): void =>
+            onRenameTitle: (value: string): void => {
+              if (value.length > 30) return;
+
               setNodes((nds) =>
                 nds.map((m) => (m.id === nodeId ? { ...m, data: { ...(m.data as TableData), title: value } } : m))
-              ),
+              )
+            },
 
-            onRenameField: (fieldId: string, value: string): void =>
+            onRenameField: (fieldId: string, value: string): void => {
+              if (value.length > 20) return;
+
               setNodes((nds) =>
                 nds.map((m) => {
                   if (m.id !== nodeId) return m;
@@ -225,7 +284,8 @@ export const PlaygroundDBSchema = ({
                     data: { ...d, fields: d.fields.map((f) => (f.id === fieldId ? { ...f, label: value } : f)) },
                   };
                 })
-              ),
+              );
+            },
 
             onRemove: (): void => {
               setNodes((nds) => nds.filter((m) => m.id !== nodeId));
@@ -271,7 +331,39 @@ export const PlaygroundDBSchema = ({
       return;
     }
 
+    const pkType = redField.dataType ?? 'INT'; // Si no tiene tipo, asignamos "INT"
+
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id !== blueNodeId) return node;
+        const data = node.data as TableData;
+        return {
+          ...node,
+          data: {
+            ...data,
+            fields: data.fields.map((field) => {
+              if (field.id === blueFieldId) {
+                // Asignamos el tipo de la PK a la FK
+                return { ...field, dataType: pkType, hasType: true };
+              }
+              return field;
+            }),
+          },
+        };
+      })
+    );
+
     // lanes usados
+    const srcMax = (degreeMaps.outDeg.get(`${blueNodeId}:${blueFieldId}`) ?? 0) + 2;
+    const tgtMax = (degreeMaps.inDeg.get(`${redNodeId}:${redFieldId}`) ?? 0) + 2;
+    const maxSrc = Math.max(6, srcMax);
+    const maxTgt = Math.max(6, tgtMax); 
+
+    const nextLane = (used: number[], max: number) => {
+      for (let i = 0; i < max; i++) if (!used.includes(i)) return i;
+      return used.length % max; // fallback
+    };
+
     const usedSrc = edges
       .filter((e) => e.source === blueNodeId && e.sourceHandle?.startsWith(`${blueFieldId}-in-src-btm-`))
       .map((e) => laneFromHandle(e.sourceHandle)!)
@@ -282,8 +374,13 @@ export const PlaygroundDBSchema = ({
       .map((e) => laneFromHandle(e.targetHandle)!)
       .filter((n) => Number.isFinite(n)) as number[];
 
-    const srcLane = nextLane(usedSrc, LANE_COUNT);
-    const tgtLane = nextLane(usedTgt, LANE_COUNT);
+    // const srcLane = nextLane(usedSrc, LANE_COUNT);
+    // const tgtLane = nextLane(usedTgt, LANE_COUNT);
+    const srcLane = nextLane(usedSrc, maxSrc);
+    const tgtLane = nextLane(usedTgt, maxTgt);
+
+    const lane = Math.max(srcLane, tgtLane);      // un índice estable por arista
+    const LANE_OFFSET = 10;                        // separación entre líneas en el trayecto
 
     setEdges((eds) =>
       addEdge(
@@ -292,7 +389,10 @@ export const PlaygroundDBSchema = ({
           sourceHandle: `${blueFieldId}-in-src-btm-${srcLane}`,
           target: redNodeId!,
           targetHandle: `${redFieldId}-out-tgt-btm-${tgtLane}`,
-          type: 'smart',
+          type: 'osmooth', //'smoothstep', //'smart',
+          // pathOptions: { offset: 8 + lane * LANE_OFFSET, borderRadius: 10 },
+          // pathOptions: { offset: 8 + lane * LANE_OFFSET, borderRadius: 10 },
+          data: { offset: 8 + lane * LANE_OFFSET, borderRadius: 10 },
           style: EDGE_BASE,
         },
         eds
@@ -330,11 +430,14 @@ export const PlaygroundDBSchema = ({
         edgeTypes={edgeTypes}
         nodes={nodesWithActions}
         edges={edges}
-        defaultEdgeOptions={{ ...defaultEdgeOptions, type: 'smart' }}
-        connectionLineType={ConnectionLineType.Step}
+        defaultEdgeOptions={{ 
+          ...defaultEdgeOptions, 
+          // type: 'smart',
+        }}
+        connectionLineType={ConnectionLineType.SmoothStep}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
+        onEdgesChange={onEdgesChange  }
         onConnect={onConnect}
         onEdgeClick={onEdgeClick}
         onPaneClick={onPaneClick}
@@ -367,6 +470,7 @@ export const PlaygroundDBSchema = ({
           >
             No se puede crear la llave foránea, no se encontró ninguna llave primaria
           </p>
+          
           <div
             style={{
               display: 'flex',

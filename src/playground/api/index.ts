@@ -3,6 +3,7 @@ import axios from "axios";
 // import MockAdapter from "axios-mock-adapter";
 import { BASE_URL } from "../../shared/consts";
 import { sleep } from "../../utils";
+import type { ConvertionResult } from "../../types";
 
 export interface ApiResponse {
     ok: boolean,
@@ -45,16 +46,27 @@ const formatSteps = (steps: string[]): string => {
 }
 
 const getApiResponse = async (url: string, data: any) => {
-    return new Promise<ApiResponse | string>(async (resolve, reject) => {
+    return new Promise<ApiResponse | ConvertionResult>(async (resolve, reject) => {
         try {
+            // const temp = (await api.post(url, data)).data;
+            // console.log("resultadoooooo:");
+            // console.log(temp)
+            // const result = temp.data;
+
             const result = (await api.post(url, data)).data;
+
+            console.log("resultadooooo:");
+            console.log(result);
+            
 
             if ("mensajes" in result) {
                 resolve(formatMessages(result.mensajes, true));
             } else {
-                resolve(formatSteps(result.pasos));
+                const temp = result as ConvertionResult;
+                resolve(temp);
             }
         } catch(error: any) {
+            console.log(error)
             const errors = formatMessages(error.response.data.mensajes, false);
             reject(errors);
         }
@@ -70,9 +82,9 @@ export const validateSchema = async (data: any): Promise<ApiResponse> => {
     }
 };
 
-export const transformQuery = async (data: any): Promise<string> => {
+export const transformQuery = async (data: any): Promise<ConvertionResult> => {
     try {
-        return await getApiResponse('convert', data) as string;
+        return await getApiResponse('convert', data) as ConvertionResult;
     } catch (error: any) {
         return error;
     }

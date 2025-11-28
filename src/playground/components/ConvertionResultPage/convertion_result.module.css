@@ -1,9 +1,9 @@
 .playground_code {
-    height: 90%;
+    height: 100%;
 }
 
 .code_editor_container {
-    height: 50%;
+    height: 30%;
     padding: 50px 100px;
 }
 
@@ -18,7 +18,8 @@
     display: flex;
     align-items: start;
     gap: 20px;
-    height: 50%;
+    height: 90%;
+    overflow-y: auto;
 }
 
 .playground_code__code_container button {
@@ -29,11 +30,12 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
-    padding: 20px 0 0 100px;
+    /* padding: 20px 100px; */
+    padding: 20px 100px 0 100PX;
     border-top: solid 5px #AAAA;
     overflow-y: auto;
-    max-height: 48%;
-    height: 48%;
+    max-height: 55%;
+    height: 100%;
 }
 
 .validator_message h2 {
@@ -47,7 +49,26 @@
     gap: 30px;
 }
 
+.validator_message__title_container__between {
+    justify-content: space-between;
+}
+
 .validator_message h2 {
     margin: 0;
 }
 
+.tree_popup {
+    position: relative;
+    width: 97vw;
+    height: 91vh;
+}
+
+.tree_popup__button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.small_tree {
+    
+}
