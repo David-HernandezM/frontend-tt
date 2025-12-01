@@ -23,7 +23,7 @@ export const nextPosition = (i: number) => ({ x: 100 + (i % 3) * 400, y: 80 + Ma
 // const LANE_COUNT = 6;
 // const LANE_STEP  = 10;
 const LANE_STEP = 18;        // antes 10 → más aire horizontal
-const LANE_Y_JITTER = 4;     // px de “escalón” vertical por lane
+// const _LANE_Y_JITTER = 4;     // px de “escalón” vertical por lane
 const SIDE_INSET = 8;        // mueve el anclaje ~8px hacia adentro del campo
 
 type Field = {

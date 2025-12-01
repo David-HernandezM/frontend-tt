@@ -10,7 +10,6 @@ import {
   ConnectionLineType, type Node, type Edge, type Connection
 } from '@xyflow/react';
 import { MarkerType } from '@xyflow/react';
-import { SmartStepEdge } from '@tisoap/react-flow-smart-edge';
 import styles from './playground_schema.module.css';
 import '@xyflow/react/dist/style.css';
 import { SmoothStepEdge, type EdgeProps } from '@xyflow/react';
@@ -41,7 +40,7 @@ const defaultEdgeOptions = {
 const edgeTypes = { osmooth: OffsetSmoothStepEdge };
 
 /** ---------- helpers lanes/handles ---------- */
-const LANE_COUNT = 6;
+// const LANE_COUNT = 6;
 const HANDLE_SRC_RE = /-in-src-btm-(\d+)$/;
 const HANDLE_TGT_RE = /-out-tgt-btm-(\d+)$/;
 
@@ -89,10 +88,6 @@ interface Props {
   onNodesChange: any;
   onEdgesChange: any;
 }
-
-const errores = [
-  "No se puede crear la llave foránea, no se encontró ninguna llave primaria",
-]
 
 export const PlaygroundDBSchema = ({
   nodes, edges, setEdges, setNodes, onEdgesChange, onNodesChange
@@ -169,11 +164,11 @@ export const PlaygroundDBSchema = ({
 
 
 
-       
+
             onSetDataType: (fieldId: string, type: DataType): void =>
               setNodes((prev) => {
                 if (isFieldFK(nodeId, fieldId)) return prev;
-                
+
                 let next = applyTypeToField(prev, nodeId, fieldId, type);
 
                 const owner = next.find((x) => x.id === nodeId);
@@ -357,7 +352,7 @@ export const PlaygroundDBSchema = ({
     const srcMax = (degreeMaps.outDeg.get(`${blueNodeId}:${blueFieldId}`) ?? 0) + 2;
     const tgtMax = (degreeMaps.inDeg.get(`${redNodeId}:${redFieldId}`) ?? 0) + 2;
     const maxSrc = Math.max(6, srcMax);
-    const maxTgt = Math.max(6, tgtMax); 
+    const maxTgt = Math.max(6, tgtMax);
 
     const nextLane = (used: number[], max: number) => {
       for (let i = 0; i < max; i++) if (!used.includes(i)) return i;
@@ -430,8 +425,8 @@ export const PlaygroundDBSchema = ({
         edgeTypes={edgeTypes}
         nodes={nodesWithActions}
         edges={edges}
-        defaultEdgeOptions={{ 
-          ...defaultEdgeOptions, 
+        defaultEdgeOptions={{
+          ...defaultEdgeOptions,
           // type: 'smart',
         }}
         connectionLineType={ConnectionLineType.SmoothStep}
@@ -470,7 +465,7 @@ export const PlaygroundDBSchema = ({
           >
             No se puede crear la llave foránea, no se encontró ninguna llave primaria
           </p>
-          
+
           <div
             style={{
               display: 'flex',

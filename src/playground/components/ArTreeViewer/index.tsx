@@ -41,7 +41,7 @@ export const ArTreeViewer = ({ data }: Props) => {
   const [nodes, , onNodesChange] = useNodesState<RFNode>(
     built.nodes as Node<StepNodeData>[]
   );
-  const [edgesState, setEdgesState, onEdgesChange] = useEdgesState(built.edges);
+  const [edgesState, _setEdgesState, onEdgesChange] = useEdgesState(built.edges);
   const [activeEdgeId, setActiveEdgeId] = useState<string | null>(null);
 
   const handleEdgeClick = (_evt: MouseEvent, edge: Edge): void => {

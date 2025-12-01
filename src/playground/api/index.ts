@@ -40,10 +40,10 @@ const formatMessages = (messages: ServerResponse[], isOk: boolean): ApiResponse 
     return response;
 }
 
-const formatSteps = (steps: string[]): string => {
-    const newSteps = steps.map(step => `${step}\n`);
-    return newSteps.join('');
-}
+// const _formatSteps = (steps: string[]): string => {
+//     const newSteps = steps.map(step => `${step}\n`);
+//     return newSteps.join('');
+// }
 
 const getApiResponse = async (url: string, data: any) => {
     return new Promise<ApiResponse | ConvertionResult>(async (resolve, reject) => {

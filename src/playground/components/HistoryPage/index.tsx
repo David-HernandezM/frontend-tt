@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { Button } from '../../../shared/Button/Button';
 import { CodeEditor } from '../CodeEditor';
-import { Modal } from '../../../shared/Modal';
 import type { ExportedSchema } from '../../../utils';
 import styles from './historypage.module.css';
 
