@@ -6,6 +6,7 @@ import type { ArbolPayload } from '../../../utils/buildTreeGraph';
 import styles from './convertion_result.module.css';
 import { Modal } from '../../../shared/Modal';
 import { Button } from '../../../shared/Button/Button';
+import { ReactFlowProvider } from '@xyflow/react';
 import cx from "clsx";
 
 interface Props {
@@ -92,7 +93,10 @@ export const ConvertionResultPage = ({code, tree, isLoading = true}: Props) => {
                     <div
                         className={styles.small_tree}
                     >
-                        <ArTreeViewer data={tree}/>
+                        <ReactFlowProvider>
+                            <ArTreeViewer data={tree}/>
+                        </ReactFlowProvider>
+                        
                     </div>
                 )
             }            
@@ -105,7 +109,10 @@ export const ConvertionResultPage = ({code, tree, isLoading = true}: Props) => {
             <div
                 className={cx(styles.tree_popup)}
             >
-                <ArTreeViewer data={tree}/>
+                <ReactFlowProvider>
+                            <ArTreeViewer data={tree}/>
+                        </ReactFlowProvider>
+                {/* <ArTreeViewer data={tree}/> */}
                 <Button
                     classname={styles.tree_popup__button}
                     onClick={() => setModalOpen(false)}
