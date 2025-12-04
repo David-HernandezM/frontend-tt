@@ -14,7 +14,12 @@ import styles from './playground_schema.module.css';
 import '@xyflow/react/dist/style.css';
 import { SmoothStepEdge, type EdgeProps } from '@xyflow/react';
 
-
+const errors = [
+  "No se puede crear la llave foránea, no se encontró ninguna llave primaria.",
+  "Solo se puede crear un máximo de 15 tablas.",
+  "Solo se pueden asignar un máximo de 15 columnas a cada tabla.",
+  "No se puede dejar en blanco el nombre de una tabla o columna.",
+];
 
 export const OffsetSmoothStepEdge = (props: EdgeProps) => {
   const offset = (props.data?.offset as number) ?? 0;
@@ -94,10 +99,20 @@ export const PlaygroundDBSchema = ({
 }: Props) => {
 
   const [openModal, setOpenModal] = useState(false);
+  const [errorIndex, setErrorIndex] = useState(0);
+  const [tableIndexTitleIsWhite, setTableIndexTitleIsWhite] = useState<string[]>([]);
+  const [columnIndexEmptyName, setColumnIndexEmptyName] = useState<string[]>([]);
 
   const addTable = (): void => {
     setNodes((nds) => {
       console.log("NODOS TOTALEEEES: ", nds.length);
+
+      if (nds.length == 15) {
+        setErrorIndex(1);
+        setOpenModal(true);
+        return nds;
+      };
+
       const id = makeId();
       const node: Node = {
         id,
@@ -249,6 +264,13 @@ export const PlaygroundDBSchema = ({
                   if (m.id !== nodeId) return m;
                   const d = m.data as TableData;
                   const idx = d.fields.length + 1;
+
+                  if (d.fields.length > 9) {
+                    setErrorIndex(2);
+                    setOpenModal(true);
+                    return m;
+                  }
+
                   return {
                     ...m,
                     data: {
@@ -262,9 +284,27 @@ export const PlaygroundDBSchema = ({
             onRenameTitle: (value: string): void => {
               if (value.length > 30) return;
 
+              let tableId: null | string = null;
+
               setNodes((nds) =>
-                nds.map((m) => (m.id === nodeId ? { ...m, data: { ...(m.data as TableData), title: value } } : m))
+                nds.map((m) => {
+                  if (m.id === nodeId) {tableId = m.id};
+                  return (m.id === nodeId ? { ...m, data: { ...(m.data as TableData), title: value } } : m);
+                })
               )
+
+              if (tableId && value.trim().length == 0) {
+                setTableIndexTitleIsWhite([
+                  ...tableIndexTitleIsWhite,
+                  tableId
+                ]);
+              } else if (tableId && value.trim().length > 0) {
+                const values = tableIndexTitleIsWhite.filter(value => value != tableId);
+                
+                setTableIndexTitleIsWhite(
+                  values
+                );
+              }
             },
 
             onRenameField: (fieldId: string, value: string): void => {
@@ -280,6 +320,19 @@ export const PlaygroundDBSchema = ({
                   };
                 })
               );
+
+              if (value.trim().length == 0) {
+                setColumnIndexEmptyName([
+                  ...columnIndexEmptyName,
+                  fieldId
+                ]);
+              } else {
+                let values = columnIndexEmptyName.filter(value => value != fieldId);
+                setColumnIndexEmptyName(
+                  values
+                );
+              }
+              
             },
 
             onRemove: (): void => {
@@ -322,6 +375,7 @@ export const PlaygroundDBSchema = ({
     const redField = redData?.fields.find((f) => f.id === redFieldId);
 
     if (!redField?.isPk) {
+      setErrorIndex(0);
       setOpenModal(true);
       return;
     }
@@ -463,7 +517,8 @@ export const PlaygroundDBSchema = ({
               width: 500
             }}
           >
-            No se puede crear la llave foránea, no se encontró ninguna llave primaria
+            {/* No se puede crear la llave foránea, no se encontró ninguna llave primaria */}
+            { errors[errorIndex] }
           </p>
 
           <div

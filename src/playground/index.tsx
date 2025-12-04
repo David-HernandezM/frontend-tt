@@ -49,6 +49,9 @@ export const PlayGround = () => {
   const [validationResult, setValidationResult] = useState<{ok: boolean, message: string, errors: string[]} | null>(null);
   const [openErrorModal, setOpenErrorModal] = useState(false);
 
+  const [openNamesModalError, setOpenNamesModalError] = useState(false);
+  // const [someNameIsEmpty, setsomeNameIsEmpty] = useState(false);
+
   const onButtonSelectedChange = (id: number) => {
     const buttonsSelected = Array(4).fill(false);
     buttonsSelected[id] = true;
@@ -243,6 +246,42 @@ export const PlayGround = () => {
               >
               <Button
                   onClick={() => setOpenErrorModal(false)}
+              >
+                  Aceptar
+              </Button>
+              </div>
+          </div>
+      </Modal>
+      <Modal
+          open={openNamesModalError}
+          onClose={() => setOpenNamesModalError(false)}
+          title='Errror:'
+          >
+          <div
+              style={{
+              display: 'flex',
+              flexDirection: 'column'
+              }}
+          >
+              <p
+              style={{
+                  textAlign: 'center',
+                  color: 'black',
+                  fontSize: 20,
+                  padding: "0 50px",
+                  width: 500
+              }}
+              >
+                  Todas las tablas y todas las columnas deben de tener un nombre.
+              </p>
+              <div
+              style={{
+                  display: 'flex',
+                  justifyContent: 'end'
+              }}
+              >
+              <Button
+                  onClick={() => setOpenNamesModalError(false)}
               >
                   Aceptar
               </Button>
