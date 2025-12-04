@@ -1,3 +1,55 @@
 {
-"algebraRelacional": "π[FechaNac, Direccion](σ[Nombre = 'Jose' AND Apellido1 = 'Perez' AND Apellido2 = 'Perez'](EMPLEADO))"
+    "tables": [
+        {
+            "name": "usuario",
+            "columns": [
+                {
+                    "name": "id_usuario",
+                    "type": "int",
+                    "primaryKey": true
+                },
+                {
+                    "name": "nombre",
+                    "type": "int"
+                },
+                {
+                    "name": "id_ciudad",
+                    "type": "int"
+                }
+            ]
+        },
+        {
+            "name": "pedido",
+            "columns": [
+                {
+                    "name": "id_pedido",
+                    "type": "int",
+                    "primaryKey": true
+                },
+                {
+                    "name": "id_usuario",
+                    "type": "int"
+                },
+                {
+                    "name": "total",
+                    "type": "int"
+                }
+            ]
+        },
+        {
+            "name": "ciudad",
+            "columns": [
+                {
+                    "name": "id_ciudad",
+                    "type": "int",
+                    "primaryKey": true
+                },
+                {
+                    "name": "pais",
+                    "type": "int"
+                }
+            ]
+        }
+    ],
+    "sqlQuery": "SELECT * FROM usuario, pedido"
 }
