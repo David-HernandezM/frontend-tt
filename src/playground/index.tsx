@@ -50,7 +50,7 @@ export const PlayGround = () => {
   const [openErrorModal, setOpenErrorModal] = useState(false);
 
   const [openNamesModalError, setOpenNamesModalError] = useState(false);
-  // const [someNameIsEmpty, setsomeNameIsEmpty] = useState(false);
+  const [someNameIsEmpty, setsomeNameIsEmpty] = useState(false);
 
   const onButtonSelectedChange = (id: number) => {
     const buttonsSelected = Array(4).fill(false);
@@ -113,13 +113,18 @@ export const PlayGround = () => {
       <div
         className={styles.playground__canvas}
       >
-        { buttonsSelected[0] && <PlaygroundDBSchema nodes={nodes} edges={edges} setEdges={setEdges} setNodes={setNodes} onEdgesChange={onEdgesChange} onNodesChange={onNodesChange} /> }
+        { buttonsSelected[0] && <PlaygroundDBSchema nameIsEmpty={(val) => setsomeNameIsEmpty(val)} nodes={nodes} edges={edges} setEdges={setEdges} setNodes={setNodes} onEdgesChange={onEdgesChange} onNodesChange={onNodesChange} /> }
         { buttonsSelected[1] && 
           <PlaygroundCode 
             isLoading={isLoadingVerificationResult}
             code={code} 
             onCodeChange={(newCode) => setCode(newCode)} 
             onValidateSchema={async () => {
+              if (someNameIsEmpty) {
+                setOpenNamesModalError(true);
+                return;
+              }
+
               setValidationResult(null);
               setIsLoadingVerificationResult(true);
               

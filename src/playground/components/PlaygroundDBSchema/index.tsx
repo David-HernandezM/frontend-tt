@@ -92,10 +92,11 @@ interface Props {
   setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
   onNodesChange: any;
   onEdgesChange: any;
+  nameIsEmpty: (val: boolean) => void
 }
 
 export const PlaygroundDBSchema = ({
-  nodes, edges, setEdges, setNodes, onEdgesChange, onNodesChange
+  nodes, edges, setEdges, setNodes, onEdgesChange, onNodesChange, nameIsEmpty
 }: Props) => {
 
   const [openModal, setOpenModal] = useState(false);
@@ -294,16 +295,23 @@ export const PlaygroundDBSchema = ({
               )
 
               if (tableId && value.trim().length == 0) {
-                setTableIndexTitleIsWhite([
+                let values = [
                   ...tableIndexTitleIsWhite,
                   tableId
-                ]);
+                ]
+
+                setTableIndexTitleIsWhite(values);
+
+                nameIsEmpty(columnIndexEmptyName.length > 0 || values.length > 0);
+
               } else if (tableId && value.trim().length > 0) {
                 const values = tableIndexTitleIsWhite.filter(value => value != tableId);
                 
                 setTableIndexTitleIsWhite(
                   values
                 );
+
+                nameIsEmpty(columnIndexEmptyName.length > 0 || values.length > 0);
               }
             },
 
@@ -322,17 +330,22 @@ export const PlaygroundDBSchema = ({
               );
 
               if (value.trim().length == 0) {
-                setColumnIndexEmptyName([
+                let values = [
                   ...columnIndexEmptyName,
                   fieldId
-                ]);
+                ];
+
+                setColumnIndexEmptyName(values);
+
+                nameIsEmpty(values.length > 0 || tableIndexTitleIsWhite.length > 0);
               } else {
                 let values = columnIndexEmptyName.filter(value => value != fieldId);
                 setColumnIndexEmptyName(
                   values
                 );
+
+                nameIsEmpty(values.length > 0 || tableIndexTitleIsWhite.length > 0);
               }
-              
             },
 
             onRemove: (): void => {
