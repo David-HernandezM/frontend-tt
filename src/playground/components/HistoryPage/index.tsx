@@ -4,6 +4,7 @@ import { Button } from '../../../shared/Button/Button';
 import { CodeEditor } from '../CodeEditor';
 import type { ExportedSchema } from '../../../utils';
 import styles from './historypage.module.css';
+import { Modal } from '../../../shared/Modal';
 
 interface Props {
     onSelectSchema: (exportedSchema: ExportedSchema) => void;
@@ -16,6 +17,7 @@ export const HistoryPage = ({onSelectSchema}: Props) => {
     } = useLocalStorage(); 
 
     const [codes, setCodes] = useState(getShemasHistory() ? getShemasHistory()! : []);
+    const [openModal, setOpenModal] = useState(false);
 
     return (
         <div
@@ -39,6 +41,7 @@ export const HistoryPage = ({onSelectSchema}: Props) => {
                                 <Button
                                     onClick={() => {
                                         onSelectSchema(schemaData);
+                                        setOpenModal(true);
                                     }}
                                 >
                                     Usar
@@ -57,7 +60,44 @@ export const HistoryPage = ({onSelectSchema}: Props) => {
                     )
                 })
             }
+            <Modal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                title='Errror:'
+                >
+                <div
+                    style={{
+                    display: 'flex',
+                    flexDirection: 'column'
+                    }}
+                >
+                    <p
+                    style={{
+                        textAlign: 'center',
+                        color: 'black',
+                        fontSize: 20,
+                        padding: "0 50px",
+                        width: 500
+                    }}
+                    >
+                        Se actualizo el esquema de base de datos y consulta SQL.
+                    </p>
+                    <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'end'
+                    }}
+                    >
+                    <Button
+                        onClick={() => setOpenModal(false)}
+                    >
+                        Aceptar
+                    </Button>
+                    </div>
+                </div>
+            </Modal>
         </div>
+
     )
 }
 
