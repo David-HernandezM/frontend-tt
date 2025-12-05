@@ -63,7 +63,7 @@ export const HistoryPage = ({onSelectSchema}: Props) => {
             <Modal
                 open={openModal}
                 onClose={() => setOpenModal(false)}
-                title='Errror:'
+                title='Actualización:'
                 >
                 <div
                     style={{
