@@ -1,7 +1,7 @@
 import { Home } from "../home";
 import { Root } from "./root/Root";
 import { PlayGround } from "../playground";
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 
 export default createBrowserRouter([
     {
@@ -15,6 +15,10 @@ export default createBrowserRouter([
             {
                 path: "playground",
                 Component: PlayGround
+            },
+            {
+                path: "*",
+                element: <Navigate to={"/"} replace />
             }
         ]
     }
